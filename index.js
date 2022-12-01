@@ -1,17 +1,24 @@
 const CheckWin = require('./Checker')
 
-const io = require("socket.io")(3001, {
-    cors: {
-        origin: ['http://localhost:9200']
-    }
-})
-
+const cors = require('cors')
 const express = require('express')
 const path = require('path');
 const app = express()
+app.use(cors())
+app.use(express.static(path.join(__dirname, '/build')));
+var http = require('http').createServer(app);
+
+const io = require("socket.io")(http, {
+    cors: {
+        origin: ['*']
+    }
+})(http);
+
 
 // Serve the static files from the React app
-app.use(express.static(path.join(__dirname, '/build')));
+
+
+
 
 // Handles any requests that don't match the ones above
 app.get('*', (req,res) =>{
@@ -19,9 +26,10 @@ app.get('*', (req,res) =>{
 });
 
 //cors
-const cors = require('cors')
 
-app.use(cors())
+
+
+
 
 // var Clients = 0;
 var Clients = new Map();
@@ -56,7 +64,13 @@ io.on("connection", socket => {
     })
 })
 
-const PORT = 9200
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`)
-})
+// const PORT = process.env.PORT || 9200
+// app.listen(PORT, () => {
+//     console.log(`Server running on port ${PORT}`)
+// })
+
+http.listen(process.env.PORT || 3000, function() {
+    var host = http.address().address
+    var port = http.address().port
+    console.log('App listening at http://%s:%s', host, port)
+});
