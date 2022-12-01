@@ -6,6 +6,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
+    "build:ui": "rm -rf build && cd ../frontend && npm run build && cp -r build ../backend",
+    "deploy": "git add . && git commit -m \"Deploying\" && git push origin master",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
@@ -15,6 +17,7 @@
   },
   "dependencies": {
     "cors": "^2.8.5",
+    "express": "^4.18.2",
     "socket.io": "^4.5.4"
   }
 }
