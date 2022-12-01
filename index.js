@@ -48,6 +48,8 @@ io.on("connection", socket => {
             Clients.set(roomId,2);
             socket.broadcast.emit("Value",0,true);
             socket.emit("Value",1,false);
+        }else{
+            socket.emit("Value",-2,false);   
         }
         socket.on("send-update", (delta) => {
             console.log(delta);
