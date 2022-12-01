@@ -3,6 +3,7 @@ const CheckWin = require('./Checker')
 const cors = require('cors')
 const express = require('express')
 const path = require('path');
+const CheckDraw = require('./CheckDraw');
 const app = express()
 app.use(cors())
 app.use(express.static(path.join(__dirname, '/build')));
@@ -55,6 +56,9 @@ io.on("connection", socket => {
             if (CheckWin(delta) === true) {
                 socket.emit("finished", true)
                 socket.broadcast.to(roomId).emit("finished", false)
+            }else if(CheckDraw(delta) === true){
+                socket.emit("finished", -1)
+                socket.broadcast.to(roomId).emit("finished",-1)
             }
         })
         socket.on('disconnect', function(){

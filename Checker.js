@@ -7,7 +7,17 @@ const CheckWin = (State) => {
     if(State[2] != -1 && State[2] == State[5] && State[2] == State[8]) return true;
     if(State[0] != -1 && State[0] == State[4] && State[0] == State[8]) return true;
     if(State[2] != -1 && State[2] == State[4] && State[2] == State[6]) return true;
-    return false;
+
+    var flag=true;
+    for(i=0;i<9;i++){
+        if(State[i] === -1){
+            flag=false
+            break
+        }
+    }
+    if(flag){
+        return false;
+    }
 }
 
 module.exports = CheckWin;
