@@ -12,7 +12,7 @@ const io = require("socket.io")(http, {
     cors: {
         origin: ['*']
     }
-})(http);
+});
 
 
 // Serve the static files from the React app
@@ -69,8 +69,8 @@ io.on("connection", socket => {
 //     console.log(`Server running on port ${PORT}`)
 // })
 
-http.listen(process.env.PORT || 3000, function() {
+http.listen(process.env.PORT || 3001, function() {
     var host = http.address().address
-    var port = http.address().port
+    var port = http.address().port 
     console.log('App listening at http://%s:%s', host, port)
 });
