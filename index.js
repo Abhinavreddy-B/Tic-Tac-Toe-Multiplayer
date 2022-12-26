@@ -37,10 +37,8 @@ var Clients = new Map();
 
 io.on("connection", socket => {
     socket.on("connect-to-room", (roomId) => {
-        console.log(roomId);
         const numberOfClients = Clients.get(roomId);
         if(numberOfClients === undefined){
-            console.log("Inside Client 1")
             socket.join(roomId);
             Clients.set(roomId,1);
         }else if(numberOfClients === 1){
@@ -52,7 +50,6 @@ io.on("connection", socket => {
             socket.emit("Value",-2,false);   
         }
         socket.on("send-update", (delta) => {
-            console.log(delta);
             socket.emit("receive-change", delta, false)
             socket.broadcast.to(roomId).emit("receive-change", delta, true)
             if (CheckWin(delta) === true) {
@@ -78,5 +75,5 @@ io.on("connection", socket => {
 http.listen(process.env.PORT || 3001, function() {
     var host = http.address().address
     var port = http.address().port 
-    console.log('App listening at http://%s:%s', host, port)
+    console.log(`App listening on port ${port}`)
 });
