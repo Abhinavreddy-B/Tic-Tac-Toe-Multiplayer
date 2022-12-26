@@ -16,24 +16,37 @@ const io = require("socket.io")(http, {
 });
 
 
+var Clients = new Map();
 // Serve the static files from the React app
 
-
+app.get('/verify/:id', (req,res) => {
+    if(Clients.has(req.params.id) === true){
+        res.status(200).json({status: true})
+    }else{
+        res.status(200).json({status: false})
+    }
+})
 
 
 // Handles any requests that don't match the ones above
-app.get('*', (req,res) =>{
+app.get('/', (req,res) =>{
     res.sendFile(path.join(__dirname+'/build/'));
 });
 
+app.get('/:id', (req,res) =>{
+    const regexExp = /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
+    if(regexExp.test(req.params.id) === true){
+        res.sendFile(path.join(__dirname+'/build/'));
+    }else{
+        res.status(404).json({error: "Malformed ID"})
+    }
+});
 //cors
 
 
 
 
 
-// var Clients = 0;
-var Clients = new Map();
 
 io.on("connection", socket => {
     socket.on("connect-to-room", (roomId) => {
@@ -66,6 +79,7 @@ io.on("connection", socket => {
         });
     })
 })
+
 
 // const PORT = process.env.PORT || 9200
 // app.listen(PORT, () => {
